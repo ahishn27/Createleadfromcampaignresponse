@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Xrm.Sdk;
 using Microsoft.Crm.Sdk.Messages;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Messages;
+
 
 namespace Campaignresponsetolead
 {
@@ -21,7 +23,7 @@ namespace Campaignresponsetolead
 
             int step = 0;
 
-
+            Guid LeadId = Guid.Empty;
             if (context.InputParameters.Contains("Target") & context.InputParameters["Target"] is Entity)
             {
                 Entity campaignresponse = (Entity)context.InputParameters["Target"];
@@ -37,13 +39,12 @@ namespace Campaignresponsetolead
                     string firstName = "";
                     string lastName = "";
                     string emailid = "";
-                    string phone = "";
-                    Guid LeadId = Guid.Empty;
+                    
 
 
                     IOrganizationServiceFactory organizationServiceFactory = (IOrganizationServiceFactory)serviceProvider.GetService(typeof(IOrganizationServiceFactory));
 
-                    IOrganizationService organizationService = organizationServiceFactory.CreateOrganizationService(context.UserId);
+                    IOrganizationService service = organizationServiceFactory.CreateOrganizationService(context.UserId);
 
                     if (campaignresponse.Attributes.Contains("subject"))
                         subject = campaignresponse["subject"].ToString();
@@ -72,6 +73,9 @@ namespace Campaignresponsetolead
                     lead["emailaddress1"] = emailid;
                     lead["relatedobjectid"] = new EntityReference("lead", campaignresponse.Id);
                     tracingService.Trace("Lead Created");
+
+                    LeadId = service.Create(lead);
+                      tracingService.Trace("Lead Created with GUID" + LeadId);
                 }
                 catch (Exception e)
                 {
