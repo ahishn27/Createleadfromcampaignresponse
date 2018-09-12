@@ -15,7 +15,7 @@ namespace Campaignresponsetolead
         public void Execute(IServiceProvider serviceProvider)
         {
             //Tracing service for debugging
-            ITracingService tracingService = (ITracingService)serviceProvider.GetService(typeof(IServiceProvider));
+            ITracingService tracingService = (ITracingService)serviceProvider.GetService(typeof(ITracingService));
             tracingService.Trace("Tracing service invoked");
 
             //Get context
@@ -35,7 +35,7 @@ namespace Campaignresponsetolead
                 {
                     step = 1;
 
-                    string subject = "";
+                    string Subject = "";
                     string firstName = "";
                     string lastName = "";
                     string emailid = "";
@@ -47,8 +47,8 @@ namespace Campaignresponsetolead
                     IOrganizationService service = organizationServiceFactory.CreateOrganizationService(context.UserId);
 
                     if (campaignresponse.Attributes.Contains("subject"))
-                        subject = campaignresponse["subject"].ToString();
-                    tracingService.Trace("Subject: " + subject);
+                        Subject = campaignresponse["subject"].ToString();
+                    tracingService.Trace("Subject: " + Subject);
 
                     if (campaignresponse.Attributes.Contains("firstname"))
                         firstName = campaignresponse["firstname"].ToString();
@@ -64,10 +64,10 @@ namespace Campaignresponsetolead
 
                     step = 2;
 
-                    Entity lead = new Entity("Lead");
+                    Entity lead = new Entity("lead");
                     tracingService.Trace("Lead Invoked");
 
-                    lead["subject"] = subject;
+                    lead["subject"] = Subject;
                     lead["firstname"] = firstName;
                     lead["lastname"] = lastName;
                     lead["emailaddress1"] = emailid;
